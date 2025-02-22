@@ -55,46 +55,6 @@ Before running the notebook, ensure you have the following installed:
 2. Run each cell sequentially to set up the environment, initialize components, and execute the generative process.
 3. Modify the queries and parameters as needed to interact with different datasets or generate varied outputs.
 
-## Example
-
-```python
-# Example code snippet from the notebook
-from langchain import LangChain
-from langchain.models import OpenAI
-from langsmith import Client
-from chromadb import Client as ChromaClient
-import sqlalchemy as db
-
-# Initialize LangChain with OpenAI
-lc = LangChain(OpenAI(api_key='your-api-key'))
-
-# Initialize LangSmith for monitoring
-client = Client()
-client.monitor(lc)
-
-# Initialize Chroma for vector storage
-chroma_client = ChromaClient()
-collection = chroma_client.create_collection(name="example_collection")
-
-# Connect to SQL database
-engine = db.create_engine('sqlite:///example.db')
-connection = engine.connect()
-metadata = db.MetaData()
-
-# Retrieve data from database
-table = db.Table('your_table', metadata, autoload_with=engine)
-query = db.select([table])
-result = connection.execute(query).fetchall()
-
-# Store data embeddings in Chroma
-embeddings = lc.generate_embeddings(result)
-collection.add(embeddings=embeddings, documents=result)
-
-# Generate text using RAG
-generated_text = lc.generate_with_rag(context=result, query="What is the summary of this data?")
-print(generated_text)
-```
-
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request with your improvements.
