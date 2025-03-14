@@ -120,3 +120,5 @@ condaenv.*
 .mypy_cache/
 
 .DS_Store
+Langchain-RAG/env
+env
